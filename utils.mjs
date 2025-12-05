@@ -1,5 +1,4 @@
 import fs from 'node:fs/promises';
-import { type } from 'node:os';
 
 export async function readLines(file){
     const contents = await fs.readFile(file, {encoding: 'utf8'});
@@ -20,6 +19,37 @@ export function leftPad(v, length, c = ' '){
         v = c + v;
     }
     return v;
+}
+
+export function getOverlap(range, other){
+    if(range[0] > overlap[1] || overlap[0] > range[1]){
+        return false;
+    }
+    return [Math.max(range[0], other[0]), Math.min(range[1], other[1])];
+}
+
+export function getNonOverlap(range, other){
+    if(other[0] <= range[0] && range[1] <= other[1]) {
+        // o0 <= r0 <= r1 <= o1
+        return [];
+    }
+    
+    if(range[0] < other[0] && other[0] <= range[1] && range[1] <= other[1]){
+        // r0 < o0 <= r1 <= o1
+        return [[range[0], other[0] - 1]];
+    }
+    
+    if(other[0] <= range[0] && range[0] <= other[1] && other[1] < range[1]) {
+        // o0 <= r0 <= o1 < r1
+        return [[other[1] + 1, range[1]]];
+    }
+    
+    if(range[0] < other[0] && other[1] < range[1]) {
+        // r0 < o0 <= o1 < r1
+        return [[range[0], other[0]-1],[other[1]+1, range[1]]];
+    }
+
+    return [range];
 }
 
 export const north = {x:0, y:-1};
@@ -368,10 +398,11 @@ function lcd_2(a, b){
         larger = b;
         smaller = a;
     }
-    while(larger % smaller != 0){ //only one equals sign so you can use it with BigInt
-        const remainder = larger % smaller;
+    let remainder = larger % smaller;
+    while(remainder != 0){ //only one equals sign so you can use it with BigInt        
         larger = smaller;
         smaller = remainder;
+        remainder = larger % smaller;
     }
     return smaller;
 }
