@@ -534,7 +534,11 @@ export function insert(array, value, comparator){
 export function distanceSq(a, b){
     const dx = a.x - b.x;
     const dy = a.y - b.y;
-    return dx*dx + dy*dy;
+    if(a.z === undefined){    
+        return dx*dx + dy*dy;
+    }
+    const dz = a.z - b.z;
+    return dx*dx + dy*dy + dz*dz;
 }
 
 /**
