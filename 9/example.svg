@@ -1,0 +1,6 @@
+<svg viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 1 L11 1 L11 7 L9 7 L9 5 L2 5 L2 3 L7 3 Z"
+            style="fill:green;" />
+        <path d="M2 3 L9 3 L9 5 L2 5 Z"
+            style="fill:red;fill-opacity:0.8" />
+    </svg> 
