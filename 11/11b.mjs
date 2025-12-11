@@ -18,26 +18,15 @@ async function solve (file){
     }
 
     const cache = {}
-    const pending = {}
     
-    async function pathsToTarget(from, to, path = []){
+    function pathsToTarget(from, to, path = [from]){
         if(!cache[to]){
             cache[to]={[to]: 1};
-            pending[to] = {};
         }
-        if(cache[to][from]){
+        if(cache[to][from] !== undefined){
             return cache[to][from];
         } else if (connections[from]) {
-            if(!pending[to][from]){                  
-                pending[to][from] = Promise.all(
-                    connections[from].map(next => pathsToTarget(next, to, [...path, from]))
-                ).then(a => {
-                    return sumArray(a)
-                });
-            } else {
-                console.log(from, to, path);
-            }
-            cache[to][from] = await pending[to][from];
+            cache[to][from] = sumArray(connections[from].map(next => pathsToTarget(next, to, [...path, next])));
             return cache[to][from];
         } else {
             return 0;

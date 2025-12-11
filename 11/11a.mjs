@@ -18,12 +18,13 @@ async function solve (file){
 
     const cache = {"out": 1}
     function pathsToTarget(from){
-        if(cache[from]){
+        if(cache[from] !== undefined){
             return cache[from];
         } else {
-            return sumArray(
+            cache[from] = sumArray(
                 connections[from].map(pathsToTarget)
             )
+            return cache[from];
         }
     }
 
